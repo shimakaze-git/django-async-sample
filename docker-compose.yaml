@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  db:
+    platform: linux/amd64
+    image: mysql:5.7
+    environment:
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+      MYSQL_ROOT_PASSWORD: local_root_password
+      MYSQL_DATABASE: db
+    ports:
+      - 3306:3306
+    command: --port 3306
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    tty: true
+    ports:
+      - 6379:6379
