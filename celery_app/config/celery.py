@@ -4,8 +4,9 @@ from django.conf import settings
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 
-app: Celery = Celery('config')
-# print("app", app)
+# app: Celery = Celery('config')
+app: Celery = Celery("app")
+# app = Celery('config')
 
 app.config_from_object("django.conf:settings", namespace="CELERY")  # type: ignore
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)  # type: ignore

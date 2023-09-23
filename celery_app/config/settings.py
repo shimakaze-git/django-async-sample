@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+    "django_celery_results",
     "polls"
 ]
 
@@ -124,3 +125,15 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# redis
+# Celery configurations
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZZER = 'json'
+# BROKER_URL = "redis://redis:6379"
+
+# BROKER_URL = "redis://localhost:6379"
+CELERY_BROKER_URL = "redis://redis:6379"
+CELERY_RESULT_BACKEND = "django-db"

@@ -1,6 +1,51 @@
 version: "3"
 
 services:
+  app:
+    restart: always
+    build:
+      context: ./celery_app
+    volumes:
+      - ./celery_app:/usr/src/app
+    depends_on:
+      - db
+      - redis
+    command: |
+      bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - 8000:8000
+
+  celery:
+    container_name: celery
+    tty: true
+    build:
+      context: ./celery_app
+    volumes:
+      - ./celery_app:/usr/src/app
+      # - ./celery_app/logs:/usr/src/app/logs
+    command: celery -A config worker -l info -E
+    # command: celery -A config worker --loglevel=info  --logfile=logs/celery.log
+    # environment:
+    #   - CELERY_BROKER=redis://redis:6379/0
+    #   - CELERY_BACKEND=redis://redis:6379/0
+    depends_on:
+      - app
+      - redis
+
+  monitor:
+    container_name: monitor
+    tty: true
+    build:
+      context: ./celery_app
+    volumes:
+      - ./celery_app:/usr/src/app
+    ports:
+      - 5555:5555
+    command: celery -A config flower --port=5555
+    depends_on:
+      - app
+      - redis
+
   db:
     platform: linux/amd64
     image: mysql:5.7
@@ -14,7 +59,6 @@ services:
     command: --port 3306
 
   redis:
-    container_name: redis
     image: redis:latest
     restart: always
     tty: true
