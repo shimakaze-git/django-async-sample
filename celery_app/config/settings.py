@@ -137,3 +137,6 @@ CELERY_RESULT_SERIALIZZER = 'json'
 # BROKER_URL = "redis://localhost:6379"
 CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "django-db"
+
+# taskが開始状態になったことを確認できるための設定
+CELERY_TASK_TRACK_STARTED = True

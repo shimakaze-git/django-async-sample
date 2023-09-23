@@ -1,6 +1,7 @@
 # from config.celery
 # from config.celery import app  # type: ignore
 
+import time
 from celery import shared_task  # type: ignore
 # from celery.task import task
 # @task
@@ -27,8 +28,13 @@ def calc(a: int, b: int) -> int:
     result: int = a + b
     return result
 
-# @shared_task
-# def hogehoge():
-#     print("start hogehoge")
-#     print("hello!!!!")
-#     print("end hogehoge")
+
+@shared_task
+def time_sleep_func(project_id: str) -> str:
+    print(f"project_id - {project_id}")
+
+    time.sleep(10)
+    message: str = f"hello - {project_id}"
+    print(f"message - {message}")
+
+    return message
