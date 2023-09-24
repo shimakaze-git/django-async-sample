@@ -30,6 +30,22 @@ services:
     #   - CELERY_BACKEND=redis://redis:6379/0
     depends_on:
       - app
+      - db
+      - redis
+
+  beat:
+    container_name: beat
+    tty: true
+    build:
+      context: ./celery_app
+    volumes:
+      - ./celery_app:/usr/src/app
+      # - ./celery_app/logs:/usr/src/app/logs
+    command: celery -A config beat -l info
+    # command: celery -A config beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler --pidfile=
+    depends_on:
+      - app
+      - db
       - redis
 
   monitor:

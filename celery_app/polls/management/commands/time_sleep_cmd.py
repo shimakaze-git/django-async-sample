@@ -1,8 +1,8 @@
 import time
-from pprint import pprint
+# from pprint import pprint
 from django.core.management.base import BaseCommand
-from django_celery_results.models import TaskResult
-from django.db.models import QuerySet
+# from django_celery_results.models import TaskResult
+# from django.db.models import QuerySet
 
 from celery.result import AsyncResult
 
@@ -18,28 +18,33 @@ class Command(BaseCommand):
         task_id: str = task.id  # type: ignore
         print("task", task.id)  # type: ignore
 
-        # task_1: AsyncResult = AsyncResult(task_id)  # type: ignore
+        task_1: AsyncResult = AsyncResult(task_id)  # type: ignore
         # while (task_1.status == "STARTED") or (task_1.status == "PENDING"):  # type: ignore
         #     time.sleep(1)
         #     print(task_1.status)  # type: ignore
         #     task_1 = AsyncResult(task_id)
 
-        time.sleep(5)
+        while not task.ready():
+            time.sleep(1)
+            print(task_1.status)  # type: ignore
+            task_1 = AsyncResult(task_id)
 
-        task_models: QuerySet[TaskResult] = TaskResult.objects.filter(task_id=task_id)
-        for task_model in task_models:
-            print("task_model.result", task_model.result)
-            print("task_model.date_created", task_model.date_created)
-            print("task_model.date_done", task_model.date_done)
+        # time.sleep(5)
 
-        time.sleep(10)
+        # task_models: QuerySet[TaskResult] = TaskResult.objects.filter(task_id=task_id)
+        # for task_model in task_models:
+        #     print("task_model.result", task_model.result)
+        #     print("task_model.date_created", task_model.date_created)
+        #     print("task_model.date_done", task_model.date_done)
 
-        print("----" * 20)
+        # time.sleep(10)
 
-        task_models = TaskResult.objects.filter(task_id=task_id)
-        for task_model in task_models:
-            print("task_model.result", task_model.result)
-            print("task_model.date_created", task_model.date_created)
-            print("task_model.date_done", task_model.date_done)
+        # print("----" * 20)
 
-            pprint(task_model.__dict__)
+        # task_models = TaskResult.objects.filter(task_id=task_id)
+        # for task_model in task_models:
+        #     print("task_model.result", task_model.result)
+        #     print("task_model.date_created", task_model.date_created)
+        #     print("task_model.date_done", task_model.date_done)
+
+        #     pprint(task_model.__dict__)

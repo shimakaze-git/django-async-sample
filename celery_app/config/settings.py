@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from typing import Any
 from pathlib import Path
 
+from datetime import timedelta
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+    "django_celery_beat",
     "django_celery_results",
     "polls"
 ]
@@ -140,3 +143,13 @@ CELERY_RESULT_BACKEND = "django-db"
 
 # taskが開始状態になったことを確認できるための設定
 CELERY_TASK_TRACK_STARTED = True
+
+# Celery Beat settings
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+CELERY_BEAT_SCHEDULE = {
+    'add-every-30-seconds': {
+        "task": "polls.tasks.hello_world",
+        "schedule": timedelta(seconds=30)
+    }
+}

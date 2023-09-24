@@ -18,6 +18,7 @@ from celery import shared_task  # type: ignore
 @shared_task()
 def hello_world():
     print("start hello_world")
+    time.sleep(5)
     print("hello")
     print("-----" * 500)
     print("end hello_world")
